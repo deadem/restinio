@@ -590,15 +590,24 @@ class connection_t final
 				}
 
 			}
-			catch( const std::exception & ex )
-			{
-				trigger_error_and_close( [&]{
-					return fmt::format(
-							"[connection:{}] error while handling request: {}",
-							this->connection_id(),
-							ex.what() );
-				} );
-			}
+      catch (const restinio::exception_t &ex)
+      {
+        trigger_error_and_close([&] {
+          return fmt::format(
+            "[connection:{}] error restinio::exception_t while handling request: {}",
+            this->connection_id(),
+            ex.what());
+        });
+      }
+      catch (const asio::system_error &ex)
+      {
+        trigger_error_and_close([&] {
+          return fmt::format(
+            "[connection:{}] error asio::system_error while handling request: {}",
+            this->connection_id(),
+            ex.what());
+        });
+      }
 		}
 
 		//! Calls handler for upgrade request.
@@ -1246,3 +1255,4 @@ class connection_factory_t
 } /* namespace impl */
 
 } /* namespace restinio */
+

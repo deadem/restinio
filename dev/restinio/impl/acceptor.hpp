@@ -189,7 +189,7 @@ class acceptor_t final
 					return fmt::format( "server started on {}", ep );
 				} );
 			}
-			catch( const std::exception & ex )
+			catch( const asio::system_error & ex )
 			{
 				m_logger.error( [&]() -> auto {
 					return fmt::format( "failed to start server on {}: {}",
@@ -344,3 +344,4 @@ class acceptor_t final
 } /* namespace impl */
 
 } /* namespace restinio */
+
